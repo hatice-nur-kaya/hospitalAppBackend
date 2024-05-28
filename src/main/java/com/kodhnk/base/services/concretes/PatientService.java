@@ -39,8 +39,8 @@ public class PatientService implements IPatientService {
     }
 
     @Override
-    public DataResult<Patient> getByPatientId(Long hospitalId) {
-        Optional<Patient> patient = patientRepository.findById(hospitalId);
+    public DataResult<Patient> getByPatientId(Long id) {
+        Optional<Patient> patient = patientRepository.findById(id);
         if (patient.isPresent()) {
             return new SuccessDataResult<>(Response.GET_PATIENT.getMessage(), patient.get(), 200);
         } else {

@@ -70,7 +70,8 @@ public enum Response {
     GET_ALL_MEDICINE("Tüm İlaçlar Listelendi."),
     GET_ALL_APPOINTMENT("Tüm Randevular Listelendi."),
 
-    EMAIL_ALREADY_EXISTS("Kayıt Bulunmaktadır.");
+    EMAIL_ALREADY_EXISTS("Kayıt Bulunmaktadır."),
+    EXAMINATION_DELETE("Silindi");
 
     private final String message;
 

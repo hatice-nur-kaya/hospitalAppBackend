@@ -28,8 +28,8 @@ public class PatientController {
     }
 
     @GetMapping("/getByPatientId")
-    public ResponseEntity<DataResult<Patient>> getByPatientId(@RequestParam Long hospitalId) {
-        DataResult<Patient> result = patientService.getByPatientId(hospitalId);
+    public ResponseEntity<DataResult<Patient>> getByPatientId(@RequestParam Long id) {
+        DataResult<Patient> result = patientService.getByPatientId(id);
         return ResponseEntity.status(result.getStatusCode()).body(result);
     }
 

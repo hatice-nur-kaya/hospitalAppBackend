@@ -3,12 +3,12 @@ package com.kodhnk.base.services.concretes;
 import com.kodhnk.base.core.constant.Response;
 import com.kodhnk.base.core.utilities.*;
 import com.kodhnk.base.dataAccess.DoctorRepository;
+import com.kodhnk.base.dto.doctors.CreateDoctorByHospitalRequest;
 import com.kodhnk.base.dto.doctors.CreateDoctorRequest;
 import com.kodhnk.base.dto.doctors.UpdateDoctorRequest;
 import com.kodhnk.base.entities.*;
 import com.kodhnk.base.services.interfaces.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -58,13 +58,31 @@ public class DoctorService implements IDoctorService {
     }
 
     @Override
-    public Result createHospitalDoctor(CreateDoctorRequest request) {
+    public Result createHospitalByDoctor(CreateDoctorByHospitalRequest request) {
         Doctor doctor = new Doctor();
         DataResult<Hospital> hospitalDataResult = hospitalService.getById(request.getHospitalId());
         if (!hospitalDataResult.isSuccess()) {
             return new ErrorDataResult<>(Response.HOSPITAL_NOT_FOUND.getMessage(), null, 400);
         }
         doctor.setHospital(hospitalDataResult.getData());
+        DataResult<Department> departmentDataResult = departmentService.getDepartmentById(request.getDepartmentId());
+        if (!departmentDataResult.isSuccess()) {
+            return new ErrorDataResult<>(Response.DEPARTMENT_NOT_FOUND.getMessage(), null, 400);
+        }
+        doctor.setDepartment(departmentDataResult.getData());
+        doctor.setFirstname(request.getFirstname());
+        doctor.setLastname(request.getLastname());
+        doctor.setSpecialty(request.getSpeciality());
+        doctor.setUserType(UserType.DOCTOR);
+        doctor.setEmail(request.getEmail());
+        doctor.setPassword(passwordEncoder.encode(request.getPassword()));
+        doctorRepository.save(doctor);
+        return new SuccessDataResult<>(Response.CREATE_DOCTOR.getMessage(), doctor, 201);
+    }
+
+    @Override
+    public Result createDoctor(CreateDoctorRequest request) {
+        Doctor doctor = new Doctor();
         DataResult<Department> departmentDataResult = departmentService.getDepartmentById(request.getDepartmentId());
         if (!departmentDataResult.isSuccess()) {
             return new ErrorDataResult<>(Response.DEPARTMENT_NOT_FOUND.getMessage(), null, 400);
@@ -88,6 +106,7 @@ public class DoctorService implements IDoctorService {
         Doctor doctor = doctorDataResult.getData();
         doctor.setFirstname(request.getFirstname());
         doctor.setLastname(request.getLastname());
+        doctor.setSpecialty(request.getSpeciality());
         doctor.setEmail(request.getEmail());
         doctor.setPassword(passwordEncoder.encode(request.getPassword()));
         doctorRepository.save(doctor);

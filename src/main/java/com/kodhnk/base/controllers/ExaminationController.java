@@ -48,7 +48,7 @@ public class ExaminationController {
 
     @DeleteMapping("/deleteExamination")
     public ResponseEntity<Result> deleteExamination(@RequestParam Long id) {
-        Result result = examinationService.deletedeleteExamination(id);
+        Result result = examinationService.deleteExamination(id);
         return ResponseEntity.status(result.getStatusCode()).body(result);
     }
 }

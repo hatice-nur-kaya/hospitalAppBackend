@@ -75,16 +75,28 @@ public class HospitalService implements IHospitalService {
     @Override
     public Result addDoctorToHospital(AddDoctorToHospitalRequest request) {
         Optional<Hospital> hospitalOpt = hospitalRepository.findById(request.getHospitalId());
-        Optional<Doctor> doctorOpt = doctorRepository.findById(request.getDoctorId());
-
-        if (hospitalOpt.isPresent() && doctorOpt.isPresent()) {
-            Hospital hospital = hospitalOpt.get();
-            Doctor doctor = doctorOpt.get();
-            hospital.getDoctors().add(doctor);
-            hospitalRepository.save(hospital);
-            return new SuccessResult(Response.SUCCESS.getMessage(), 200);
-        } else {
-            return new ErrorResult(Response.ERROR.getMessage(), 400);
+        if (!hospitalOpt.isPresent()) {
+            return new ErrorResult(Response.HOSPITAL_NOT_FOUND.getMessage(), 400);
         }
+
+        Optional<Doctor> doctorOpt = doctorRepository.findById(request.getDoctorId());
+        if (!doctorOpt.isPresent()) {
+            return new ErrorResult(Response.DOCTOR_NOT_FOUND.getMessage(), 400);
+        }
+
+        Hospital hospital = hospitalOpt.get();
+        Doctor doctor = doctorOpt.get();
+        if (hospital.getDoctors().contains(doctor)) {
+            return new ErrorResult(Response.GET_DOCTOR.getMessage(), 400);
+        }
+
+        hospital.getDoctors().add(doctor);
+        doctor.setHospital(hospital);
+
+        hospitalRepository.save(hospital);
+        doctorRepository.save(doctor);
+
+        return new SuccessResult(Response.SUCCESS.getMessage(), 200);
     }
+
 }

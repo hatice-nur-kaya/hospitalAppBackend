@@ -34,8 +34,13 @@ public class AppointmentService implements IAppointmentService {
 
     @Override
     public DataResult<List<Appointment>> getAllAppointment() {
-        return null;
+        List<Appointment> allAppointments = appointmentRepository.findAll();
+        if (allAppointments.isEmpty()) {
+            return new ErrorDataResult<>(Response.APPOINTMENT_NOT_FOUND.getMessage(), null, 404);
+        }
+        return new SuccessDataResult<>(Response.GET_APPOINTMENT.getMessage(), allAppointments, 200);
     }
+
 
     @Override
     public DataResult<Appointment> getAppointmentById(Long id) {
@@ -71,7 +76,9 @@ public class AppointmentService implements IAppointmentService {
         newAppointment.setHospital(hospital.get());
         newAppointment.setDepartment(department.get());
         newAppointment.setAppointmentDate(request.getAppointmentDate());
-        newAppointment.setCreatedAt(new Date());
+        Date now = new Date();
+        newAppointment.setCreatedAt(now);
+        newAppointment.setUpdatedAt(now);
         newAppointment.setStatus(AppointmentStatus.PLANNED);
         Appointment savedAppointment = appointmentRepository.save(newAppointment);
         return new SuccessDataResult<>(Response.CREATE_APPOINTMENT.getMessage(), savedAppointment, 201);

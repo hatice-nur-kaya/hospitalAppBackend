@@ -1,5 +1,6 @@
 package com.kodhnk.base.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,12 +23,15 @@ public class Doctor extends User {
 
     @ManyToOne
     @JoinColumn(name = "hospital_id")
+    @JsonIgnore
     private Hospital hospital;
 
     @ManyToOne
     @JoinColumn(name = "department_id")
+    @JsonIgnore
     private Department department;
 
     @OneToMany(mappedBy = "doctor")
+    @JsonIgnore
     private List<Appointment> appointments;
 }
