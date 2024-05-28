@@ -22,8 +22,8 @@ public class PatientController {
     }
 
     @GetMapping("/getAllPatients")
-    public ResponseEntity<DataResult<Set<Patient>>> getAllPatients(@RequestParam Long hospitalId) {
-        DataResult<Set<Patient>> result = patientService.getAllPatients(hospitalId);
+    public ResponseEntity<DataResult<Set<Patient>>> getAllPatients() {
+        DataResult<Set<Patient>> result = patientService.getAllPatients();
         return ResponseEntity.status(result.getStatusCode()).body(result);
     }
 

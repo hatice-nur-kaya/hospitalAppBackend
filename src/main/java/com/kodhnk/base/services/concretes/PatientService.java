@@ -32,12 +32,8 @@ public class PatientService implements IPatientService {
     }
 
     @Override
-    public DataResult<Set<Patient>> getAllPatients(Long hospitalId) {
-        DataResult<Hospital> hospitalDataResult = hospitalService.getById(hospitalId);
-        if (!hospitalDataResult.isSuccess()) {
-            return new ErrorDataResult<>(Response.HOSPITAL_NOT_FOUND.getMessage(), null, 400);
-        }
-        List<Patient> patients = patientRepository.findAllByHospital(hospitalDataResult.getData());
+    public DataResult<Set<Patient>> getAllPatients() {
+        List<Patient> patients = patientRepository.findAll();
         Set<Patient> patientSet = new HashSet<>(patients);
         return new SuccessDataResult<>(Response.GET_PATIENT.getMessage(), patientSet, 200);
     }
