@@ -39,4 +39,7 @@ public class Examination {
             inverseJoinColumns = @JoinColumn(name = "medicine_id")
     )
     private List<Medicine> prescribedMedicines;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "hospital_id")
+    private Hospital hospital;
 }
