@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -20,16 +21,12 @@ public class Appointment {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "patient_id")
-    private Patient patient;
-
-    @ManyToOne
-    @JoinColumn(name = "doctor_id")
+    @JoinColumn(name = "doctor_id", nullable = false)
     private Doctor doctor;
 
     @ManyToOne
-    @JoinColumn(name = "hospital_id")
-    private Hospital hospital;
+    @JoinColumn(name = "patient_id", nullable = false)
+    private Patient patient;
 
     @ManyToOne
     @JoinColumn(name = "department_id")
@@ -38,15 +35,23 @@ public class Appointment {
     @Temporal(TemporalType.TIMESTAMP)
     private Date appointmentDate;
 
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private AppointmentStatus status;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", nullable = false, updatable = false)
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at", nullable = false)
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 }

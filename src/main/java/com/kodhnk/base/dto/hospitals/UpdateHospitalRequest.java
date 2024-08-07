@@ -10,7 +10,5 @@ import java.util.List;
 public class UpdateHospitalRequest {
     private Long id;
     private String name;
-    private String city;
-    private String district;
     private List<Long> doctorId;
 }

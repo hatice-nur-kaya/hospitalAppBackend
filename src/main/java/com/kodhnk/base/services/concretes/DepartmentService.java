@@ -6,7 +6,9 @@ import com.kodhnk.base.dataAccess.DepartmentRepository;
 import com.kodhnk.base.dto.departments.CreateDepartmentRequest;
 import com.kodhnk.base.dto.departments.UpdateDepartmentRequest;
 import com.kodhnk.base.entities.Department;
+import com.kodhnk.base.entities.Hospital;
 import com.kodhnk.base.services.interfaces.IDepartmentService;
+import com.kodhnk.base.services.interfaces.IHospitalService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +18,11 @@ import java.util.Optional;
 @Service
 public class DepartmentService implements IDepartmentService {
     private final DepartmentRepository departmentRepository;
+    private final IHospitalService hospitalService;
 
-    public DepartmentService(DepartmentRepository departmentRepository) {
+    public DepartmentService(DepartmentRepository departmentRepository, IHospitalService hospitalService) {
         this.departmentRepository = departmentRepository;
+        this.hospitalService = hospitalService;
     }
 
     @Override
@@ -39,8 +43,13 @@ public class DepartmentService implements IDepartmentService {
 
     @Override
     public DataResult<Department> createDepartment(CreateDepartmentRequest request) {
+        DataResult<Hospital> hospitalDataResult = hospitalService.getById(request.getHospitalId());
+        if (!hospitalDataResult.isSuccess()) {
+            return new ErrorDataResult<>(Response.HOSPITAL_NOT_FOUND.getMessage(), null, 400);
+        }
         Department department = new Department();
-        BeanUtils.copyProperties(request, department);
+        department.setHospital(hospitalDataResult.getData());
+        department.setName(request.getName());
         departmentRepository.save(department);
         return new SuccessDataResult<>(Response.CREATE_DEPARTMENT.getMessage(), department, 201);
     }

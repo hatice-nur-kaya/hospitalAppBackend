@@ -22,14 +22,13 @@ public class PatientController {
     }
 
     @GetMapping("/getAllPatients")
-    public ResponseEntity<DataResult<Set<Patient>>> getAllPatients() {
-        DataResult<Set<Patient>> result = patientService.getAllPatients();
+    public ResponseEntity<DataResult<Set<Patient>>> getAllPatients(@RequestParam Long hospitalId) {
+        DataResult<Set<Patient>> result = patientService.getAllPatients(hospitalId);
         return ResponseEntity.status(result.getStatusCode()).body(result);
     }
-
     @GetMapping("/getByPatientId")
-    public ResponseEntity<DataResult<Patient>> getByPatientId(@RequestParam Long id) {
-        DataResult<Patient> result = patientService.getByPatientId(id);
+    public ResponseEntity<DataResult<Patient>> getByPatientId(@RequestParam Long hospitalId) {
+        DataResult<Patient> result = patientService.getByPatientId(hospitalId);
         return ResponseEntity.status(result.getStatusCode()).body(result);
     }
 

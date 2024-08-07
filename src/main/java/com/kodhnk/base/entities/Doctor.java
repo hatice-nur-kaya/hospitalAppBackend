@@ -6,16 +6,15 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.util.List;
 
+@Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
 @Table(name = "doctors")
-public class Doctor extends User {
+public class Doctor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -34,4 +33,9 @@ public class Doctor extends User {
     @OneToMany(mappedBy = "doctor")
     @JsonIgnore
     private List<Appointment> appointments;
+
+    @OneToOne
+    @JsonIgnore
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 }

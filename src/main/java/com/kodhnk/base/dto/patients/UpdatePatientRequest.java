@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -16,4 +17,5 @@ public class UpdatePatientRequest {
     private LocalDate birthDate;
     private String password;
     private String phone;
+    private Set<Long> hospitalIds;
 }

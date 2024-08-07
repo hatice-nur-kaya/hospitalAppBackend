@@ -42,7 +42,15 @@ public class SecurityConfig {
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                         .requestMatchers("/api/v1/auth/**").permitAll()
+                        .requestMatchers("/api/v1/roles/createRole").permitAll()
+                        .requestMatchers("/api/v1/roles/getAllRoles").permitAll()
                         .requestMatchers("/api/v1/patients/**").permitAll()
+                        .requestMatchers("/api/v1/doctors/**").permitAll()
+                        .requestMatchers("/api/v1/hospitals/**").permitAll()
+                        .requestMatchers("/api/v1/departments/**").permitAll()
+                        .requestMatchers("/api/v1/examinations/**").permitAll()
+                        .requestMatchers("/api/v1/appointments/**").permitAll()
+                        .requestMatchers("/api/v1/address/**").permitAll()
                         .anyRequest().authenticated());
 
         http

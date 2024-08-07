@@ -19,5 +19,5 @@ public interface IExaminationService {
 
     DataResult<Examination> updateExamination(UpdateExaminationRequest request);
 
-    Result deleteExamination(Long id);
+    Result deletedeleteExamination(Long id);
 }

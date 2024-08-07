@@ -71,7 +71,22 @@ public enum Response {
     GET_ALL_APPOINTMENT("Tüm Randevular Listelendi."),
 
     EMAIL_ALREADY_EXISTS("Kayıt Bulunmaktadır."),
-    EXAMINATION_DELETE("Silindi");
+    ROLE_NOT_FOUND("Rol Bulunamadı."),
+    ROLE_LISTED("Roller Listelendi."),
+    ROLE_CREATED("Rol Eklendi."),
+    ROLE_UPDATED("Rol Güncellendi."),
+    ROLE_DELETED("Rol Silindi."),
+    ROLE_FOUND("Rol Getirildi."),
+    GET_DOCTORS("Doktorlar Listelendi."),
+    GET_ADDRESS("Adresler Listelendi."),
+    ADDRESS_NOT_FOUND("Adres Bulunamadı."),
+    REQUEST_IS_NULL("İstek Boş."),
+    CREATE_ADDRESS("Adres Eklendi."),
+    UPDATE_ADDRESS("Adres Güncellendi."),
+    DELETE_ADDRESS("Adres Silindi."),
+    ROLE_ALREADY_EXISTS("Rol Zaten Mevcut."),
+    CITY_IS_NULL("İl Alanı Boş."),
+    DISTRICT_IS_NULL("İlçe Alanı Boş."),;
 
     private final String message;
 

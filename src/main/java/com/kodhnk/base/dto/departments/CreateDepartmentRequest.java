@@ -7,4 +7,5 @@ import lombok.Setter;
 @Setter
 public class CreateDepartmentRequest {
     private String name;
+    private Long hospitalId;
 }

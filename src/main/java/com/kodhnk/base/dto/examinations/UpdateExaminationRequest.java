@@ -14,5 +14,4 @@ public class UpdateExaminationRequest {
     private String diagnosis;
     private String treatment;
     private String notes;
-    private Date updatedAt;
 }

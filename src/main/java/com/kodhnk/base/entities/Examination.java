@@ -27,8 +27,8 @@ public class Examination {
     private Patient patient;
 
     @ManyToOne
-    @JoinColumn(name = "doctor_id")
     @JsonIgnore
+    @JoinColumn(name = "doctor_id")
     private Doctor doctor;
 
     private Date examinationDate;
@@ -36,15 +36,11 @@ public class Examination {
     private String treatment;
     private String notes;
     @ManyToMany
+    @JsonIgnore
     @JoinTable(
             name = "examination_medicines",
             joinColumns = @JoinColumn(name = "examination_id"),
             inverseJoinColumns = @JoinColumn(name = "medicine_id")
     )
-    @JsonIgnore
     private List<Medicine> prescribedMedicines;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "hospital_id")
-    @JsonIgnore
-    private Hospital hospital;
 }

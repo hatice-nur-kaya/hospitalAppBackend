@@ -9,9 +9,9 @@ import com.kodhnk.base.entities.Patient;
 import java.util.Set;
 
 public interface IPatientService {
-    DataResult<Set<Patient>> getAllPatients();
+    DataResult<Set<Patient>> getAllPatients(Long hospitalId);
 
-    DataResult<Patient> getByPatientId(Long id);
+    DataResult<Patient> getByPatientId(Long hospitalId);
 
     DataResult<Patient> createPatient(CreatePatientRequest request);
 

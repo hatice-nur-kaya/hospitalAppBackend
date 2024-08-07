@@ -10,6 +10,5 @@ import java.util.List;
 @Setter
 public class CreateHospitalRequest {
     private String name;
-    private String city;
-    private String district;
+    private Long addressId;
 }

@@ -34,13 +34,9 @@ public class AppointmentService implements IAppointmentService {
 
     @Override
     public DataResult<List<Appointment>> getAllAppointment() {
-        List<Appointment> allAppointments = appointmentRepository.findAll();
-        if (allAppointments.isEmpty()) {
-            return new ErrorDataResult<>(Response.APPOINTMENT_NOT_FOUND.getMessage(), null, 404);
-        }
-        return new SuccessDataResult<>(Response.GET_APPOINTMENT.getMessage(), allAppointments, 200);
+        List<Appointment> appointments = appointmentRepository.findAll();
+        return new SuccessDataResult<>(Response.GET_APPOINTMENT.getMessage(), appointments, 200);
     }
-
 
     @Override
     public DataResult<Appointment> getAppointmentById(Long id) {
@@ -54,37 +50,27 @@ public class AppointmentService implements IAppointmentService {
 
     @Override
     public DataResult<Appointment> createAppointment(CreateAppointmentRequest request) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = null;
-        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            currentUsername = userDetails.getUsername();
-        }
         Optional<Patient> patient = patientRepository.findById(request.getPatientId());
+        if (!patient.isPresent()) {
+            return new ErrorDataResult<>(Response.PATIENT_NOT_FOUND.getMessage(), null, 400);
+        }
         Optional<Doctor> doctor = doctorRepository.findById(request.getDoctorId());
-        Optional<Hospital> hospital = hospitalRepository.findById(request.getHospitalId());
+        if (!doctor.isPresent()) {
+            return new ErrorDataResult<>(Response.DOCTOR_NOT_FOUND.getMessage(), null, 400);
+        }
         Optional<Department> department = departmentRepository.findById(request.getDepartmentId());
-        if (!patient.isPresent() || !doctor.isPresent() || !hospital.isPresent() || !department.isPresent()) {
-            return new ErrorDataResult<>(Response.INVALID_SELECTION.getMessage(), null, 400);
+        if (!department.isPresent()) {
+            return new ErrorDataResult<>(Response.DEPARTMENT_NOT_FOUND.getMessage(), null, 400);
         }
-        if (!doctor.get().getDepartment().equals(department.get())) {
-            return new ErrorDataResult<>("Doctor does not belong to the specified department.", null, 400);
-        }
-        Appointment newAppointment = new Appointment();
-        newAppointment.setPatient(patient.get());
-        newAppointment.setDoctor(doctor.get());
-        newAppointment.setHospital(hospital.get());
-        newAppointment.setDepartment(department.get());
-        newAppointment.setAppointmentDate(request.getAppointmentDate());
-        Date now = new Date();
-        newAppointment.setCreatedAt(now);
-        newAppointment.setUpdatedAt(now);
-        newAppointment.setStatus(AppointmentStatus.PLANNED);
-        Appointment savedAppointment = appointmentRepository.save(newAppointment);
-        return new SuccessDataResult<>(Response.CREATE_APPOINTMENT.getMessage(), savedAppointment, 201);
+        Appointment appointment = new Appointment();
+        appointment.setPatient(patient.get());
+        appointment.setDoctor(doctor.get());
+        appointment.setDepartment(department.get());
+        appointment.setAppointmentDate(request.getAppointmentDate());
+        appointment.setStatus(AppointmentStatus.PENDING);
+        appointmentRepository.save(appointment);
+        return new SuccessDataResult<>(Response.CREATE_APPOINTMENT.getMessage(), appointment, 200);
     }
-
-
 
     @Override
     public Result updateAppointment(UpdateAppointmentRequest request) {
